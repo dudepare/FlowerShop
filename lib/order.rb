@@ -1,9 +1,38 @@
-class Order
+class ItemOrder
   attr_reader :count, :code
-
+  attr_accessor :fulfilled
   def initialize(count=0, code)
     @count = count < 0 ? 0 : count
     @code = code
+    @fulfilled = false
+    @bundle = {}
+  end
+
+  def add_bundle(quantity, price, bundle)
+    @bundle[price] = [quantity, bundle]
+  end
+  
+  def get_total
+    total = 0
+    @bundle.each do |price, qb|
+      quantity = qb[0]
+      total += price * quantity 
+    end
+    total
+  end
+
+  def tally
+    if !@fulfilled
+      puts "failed to fulfill #{self}"
+      return
+    end
+    total = get_total
+    puts "#{@count} #{@code} $#{total.round(2)}"
+    @bundle.each do |price, qb|
+      quantity = qb[0]
+      bundle = qb[1]
+      puts "     #{quantity} X #{bundle} $#{price}"
+    end
   end
 
   def to_s
@@ -13,27 +42,25 @@ end
 
 class OrderParser
 
+  attr_reader :order
+
   def initialize(input="")
-    @orders = []
+    @order = []
     @input = input
     if !input.empty?
-      read_orders
+      read_order
     end
   end
 
   def parse_order(line)
     count, code = line.chomp.split(" ")
     count = count.to_i
-    order = Order.new(count, code)
+    order = ItemOrder.new(count, code)
   end
 
-  def read_orders
+  def read_order
     IO.foreach(@input) do | line |
-      @orders << parse_order(line)
+      @order << parse_order(line)
     end
-  end
-
-  def get_order
-    gets
   end
 end
