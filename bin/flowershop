@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative ("../lib/application")
+
+options = {}
+inputfile = ""
+OptionParser.new do |cmd|
+  cmd.banner = "Usage: flowershop [options] [filename]"
+  
+  cmd.on("-h", "--help", "Shows this message") do
+    puts cmd
+    exit
+  end 
+
+  cmd.on("-f", "--file INPUTFILE", "Customer order file") do |input|
+    inputfile = input
+  end
+end.parse!
+
+Application.run(inputfile)
