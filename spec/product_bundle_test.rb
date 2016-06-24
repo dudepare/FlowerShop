@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require_relative("../lib/product_bundle.rb")
+require_relative("../lib/product_bundle")
 
 describe ProductBundle do
   

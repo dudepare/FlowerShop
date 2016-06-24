@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/spec'
-require_relative("../lib/order.rb")
+require_relative("../lib/order")
 
 describe ItemOrder do
   describe "#create" do
@@ -33,6 +33,23 @@ describe ItemOrder do
         b.add_bundle(2, 3.99, 5)
         b.add_bundle(2, 1.99, 1)
         proc { b.tally }.must_output "12 T43 $11.96\n     2 X 5 $3.99\n     2 X 1 $1.99\n"
+      end
+    end
+  end
+end
+
+describe OrderParser do
+  describe "#parse_order" do
+    describe "when you give a string in this format: XX YYYY" do
+      it "reads the first token as integer, second token as string upcased" do
+        a = OrderParser.new
+        item_order = a.parse_order("12 re324")
+        item_order.count.must_equal 12
+        item_order.code.must_equal "RE324"
+
+        item_order = a.parse_order("EE E344")
+        item_order.count.must_equal 0
+        item_order.code.must_equal "E344"
       end
     end
   end

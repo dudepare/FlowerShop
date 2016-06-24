@@ -1,9 +1,15 @@
+require_relative("order")
+require_relative("product_bundle")
+
 class Engine
 
   def initialize
   end
 
   def process_order(order, flowers)
+    false if !order.is_a? ItemOrder
+    false if !flowers.is_a? ProductBundle
+
     count = order.count
     available_bundles = flowers.get_bundles.sort.reverse
 
@@ -12,7 +18,7 @@ class Engine
 
     solution = compute_min_bundle(available_bundles, count, min_bundle, bundle_used)
 
-    order.fulfilled = is_order_fulfilled?(bundle_used, count)
+    order.fulfilled = is_order_fulfilled?(bundle_used, count) && solution != 0
     
     if order.fulfilled
       bundles = count_used_bundles(bundle_used)

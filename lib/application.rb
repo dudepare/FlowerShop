@@ -14,7 +14,7 @@ class Application
       if products.keys.include?(item.code) 
         order_engine.process_order(item, products[item.code])
       else
-        puts "Item (#{item.code}) not found."
+        puts "Item #{item.code} not found."
       end
     end
 
@@ -44,5 +44,4 @@ class Application
     products[tulips.code] = tulips
     products
   end
-
 end

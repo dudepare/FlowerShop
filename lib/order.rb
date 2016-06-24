@@ -7,7 +7,7 @@ class ItemOrder
     @count = count < 0 ? 0 : count
     @code = code.upcase
     @fulfilled = false
-    @bundle = {}
+    @bundles = {}
   end
 
   def to_s
@@ -15,13 +15,18 @@ class ItemOrder
   end
 
   def add_bundle(quantity, price, bundle)
-    @bundle[price] = [quantity, bundle]
+    @bundles[bundle] = [quantity, price]
+  end
+
+  def get_bundle_info(bundle)
+    @bundles.keys.include?(bundle) ? @bundles[bundle] : [0,0]
   end
   
   def get_total
     total = 0
-    @bundle.each do |price, qb|
-      quantity = qb[0]
+    @bundles.each do |bundle, quantity_price|
+      quantity = quantity_price[0]
+      price = quantity_price[1]
       total += price * quantity 
     end
     total
@@ -34,9 +39,9 @@ class ItemOrder
     end
     total = get_total
     puts "#{@count} #{@code} $%.2f" % total
-    @bundle.each do |price, qb|
-      quantity = qb[0]
-      bundle = qb[1]
+    @bundles.each do |bundle, quantity_price|
+      quantity = quantity_price[0]
+      price = quantity_price[1]
       puts "     #{quantity} X #{bundle} $%.2f" % price
     end
   end
@@ -61,14 +66,17 @@ class OrderParser
     count, code = line.chomp.split(" ")
     count = count.to_i
     code.upcase!
-    order = ItemOrder.new(count, code)
+    item_order = ItemOrder.new(count, code)
   end
 
   def read_order
-    IO.foreach(@input) do | line |
-      @order << parse_order(line)
+    IO.foreach(@input) do | line |  
+      item = parse_order(line)
+      next if item.count == 0
+      @order << item
     end
   end
 
-  private :read_order, :parse_order
+  private :read_order
+  public :parse_order
 end
