@@ -4,7 +4,7 @@ class ProductBundle
 
   def initialize(name, code)
     @name = name
-    @code = code
+    @code = code.upcase
     @bundles = {}
   end
 
@@ -24,7 +24,5 @@ class ProductBundle
     price
   end
 
-  def to_s
-    "#{name} (#{code})"
-  end
+  public :add_bundle, :get_bundles, :get_price
 end
