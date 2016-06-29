@@ -2,12 +2,18 @@ GEM
   remote: https://rubygems.org/
   specs:
     minitest (5.9.0)
+    roodi (5.0.0)
+      ruby_parser (~> 3.2, >= 3.2.2)
+    ruby_parser (3.8.2)
+      sexp_processor (~> 4.1)
+    sexp_processor (4.7.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   minitest
+  roodi
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

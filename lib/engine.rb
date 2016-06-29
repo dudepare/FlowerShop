@@ -17,7 +17,6 @@ class Engine
     min_bundle   = [0] * (count+1)
 
     solution = compute_min_bundle(available_bundles, count, min_bundle, bundle_used)
-
     order.fulfilled = is_order_fulfilled?(bundle_used, count) && solution != 0
     
     if order.fulfilled
